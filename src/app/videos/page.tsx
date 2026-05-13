@@ -215,9 +215,10 @@ export default function VideosIndex() {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const thumbMap = require("@/generated/thumbnails.json") as Record<string, string>;
 
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const allItems = rawItems.map((v) => ({
     ...v,
-    posterUrl: v.posterUrl || thumbMap[v.slug] || undefined,
+    posterUrl: v.posterUrl || (thumbMap[v.slug] ? `${basePath}${thumbMap[v.slug]}` : undefined),
   }));
   const [query, setQuery] = useState("");
 
