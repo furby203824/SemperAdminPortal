@@ -44,6 +44,7 @@ const REFERENCE_SECTION: TreeSection = {
       label: "Inspections",
       href: "/inspections",
       children: [
+        { label: "IGMC", href: "/inspections/igmc" },
         { label: "MCAAT", href: "/inspections/mcaat" },
       ],
     },
