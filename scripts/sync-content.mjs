@@ -35,6 +35,8 @@ const mdxCollections = [
   "videos",
   "references",
   "tools",
+  "links",
+  "reports",
   "admin",
   "marines",
   "leader",

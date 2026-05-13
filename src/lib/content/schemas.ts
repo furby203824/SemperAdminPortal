@@ -58,6 +58,16 @@ export const toolSchema = baseFrontmatter.extend({
   routeSlug: z.string(),
 });
 
+export const linkSchema = baseFrontmatter.extend({
+  url: z.string().url(),
+  category: z.string(),
+});
+
+export const reportSchema = baseFrontmatter.extend({
+  reportType: z.string(),
+  url: z.string().url().optional(),
+});
+
 export const UNIT_TYPES = ["s1-g1", "i-and-i", "pac"] as const;
 export const ADMIN_FUNCTIONS = ["GENA", "OPER", "MPMN", "PERA"] as const;
 export const SKILL_LEVELS = [1000, 2000, 2100] as const;
@@ -246,6 +256,8 @@ export type Snippet = z.infer<typeof snippetSchema>;
 export type Video = z.infer<typeof videoSchema>;
 export type Reference = z.infer<typeof referenceSchema>;
 export type Tool = z.infer<typeof toolSchema>;
+export type Link = z.infer<typeof linkSchema>;
+export type Report = z.infer<typeof reportSchema>;
 export type AdminContent = z.infer<typeof adminSchema>;
 export type RoleContent = z.infer<typeof roleContentSchema>;
 

@@ -40,6 +40,8 @@ const REFERENCE_SECTION: TreeSection = {
     { label: "Citations Index", href: "/citations" },
     { label: "Tools", href: "/tools" },
     { label: "Videos", href: "/videos" },
+    { label: "Links", href: "/links" },
+    { label: "Reports", href: "/reports" },
     {
       label: "Inspections",
       href: "/inspections",
