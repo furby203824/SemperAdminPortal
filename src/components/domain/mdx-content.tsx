@@ -4,19 +4,30 @@ import rehypeSlug from "rehype-slug";
 import { cn } from "@/lib/utils";
 import { Callout } from "./callout";
 import { Citation } from "./citation";
+import { IPACRoutingCallout } from "./ipac-routing-callout";
+import { IPACvsUnitDecisionMatrix } from "./ipac-vs-unit-decision-matrix";
 
 /**
- * MdxContent - v1.2.
+ * MdxContent - v1.3.
  * Server Component MDX renderer.
- * Components map exposes Callout and Citation to MDX authors.
+ * Components map exposes Callout, Citation, IPACRoutingCallout, and
+ * IPACvsUnitDecisionMatrix to MDX authors.
  *
  * Usage in MDX:
  *   <Callout variant="warning">Verify against MCO before action.</Callout>
  *   Inline citation<Citation source="MCO 1900.16" />
+ *   <IPACRoutingCallout billet="ipac-inbound-counselor">
+ *     IPAC processes the join transaction.
+ *   </IPACRoutingCallout>
+ *   <IPACvsUnitDecisionMatrix rows={[
+ *     { unit: "Stage join package", ipac: "Run MCTFS join transaction" },
+ *   ]} />
  */
 const components = {
   Callout,
   Citation,
+  IPACRoutingCallout,
+  IPACvsUnitDecisionMatrix,
 };
 
 export async function MdxContent({
