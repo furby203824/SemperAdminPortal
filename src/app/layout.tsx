@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { AppShell } from "@/components/shell/app-shell";
-
 import "./globals.css";
 
 // Content Security Policy for static export (GitHub Pages cannot set HTTP headers).
@@ -63,10 +62,10 @@ export default function RootLayout({
         <meta httpEquiv="Content-Security-Policy" content={CSP} />
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        {/* Frame-buster loaded from static file: frame-ancestors cannot be set via meta tag on GitHub Pages. */}
-        <Script src="/SemperAdminPortal/security/frame-buster.js" strategy="beforeInteractive" />
       </head>
       <body className="antialiased">
+        {/* beforeInteractive must live in body, not head — Next.js App Router requirement. */}
+        <Script src="/SemperAdminPortal/security/frame-buster.js" strategy="beforeInteractive" />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
