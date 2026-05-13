@@ -1,0 +1,221 @@
+---
+title: "Inbound Management - IPAC Join Transaction"
+slug: "ipac-join-transaction"
+summary: "IPAC processes the MCTFS join, posts BAH and BAS, opens the OMPF Field Folder, and reconciles EDFR after S-1 hands off the inbound package."
+roles: ["admin"]
+lastVerified: "2026-05-12"
+unitType: "pac"
+topic: "inbound-management"
+function: "PERA"
+skillLevel: 2000
+ipacApplicability: "primary"
+trEventCode: "0111-PERA-2107"
+sourcePolicy: "MCO 1300.8"
+mosPerforming: ["0111"]
+billets: ["ipac-inbound-counselor", "ipac-pay-clerk", "ipac-disbursing-tech"]
+gradesPerforming: ["LCpl", "Cpl", "Sgt", "SSgt"]
+sustainmentInterval: "12 months"
+references:
+  - "MCO 1300.8 Marine Corps Personnel Assignment Policy"
+  - "MCO 5000.14D Marine Corps Administrative Procedures"
+  - "MCO P1070.12K Individual Records Administration Manual (IRAM)"
+  - "MCO P1070.12K Chapter 3 (OMPF Field Folder)"
+  - "MCO P1070.12K Chapter 6 (Key Supporting Documents)"
+  - "MCTFSPRIUM Marine Corps Total Force System Personnel Reporting Instructions Users Manual"
+  - "DoDFMR Vol 7A Chapter 25 (BAS)"
+  - "DoDFMR Vol 7A Chapter 26 (BAH)"
+performanceSteps:
+  - "Receive the inbound package from unit S-1 per MCO 5000.14D"
+  - "Validate orders, ID card, NAVMC 10922, and SGLI election"
+  - "Cut the MCTFS join transaction per MCTFSPRIUM"
+  - "Post BAH at the with or without dependents rate"
+  - "Post BAS at the standard rate"
+  - "Open the OMPF Field Folder per MCO P1070.12K Chapter 3"
+  - "Upload KSDs to the OMPF per MCO P1070.12K Chapter 6"
+  - "Pull EDFR within 24 hours and clear rejections"
+relatedRoles:
+  marine: "/marines/pcs"
+  commander: "/commander/turnover"
+source:
+  title: "MCO 1300.8 Marine Corps Personnel Assignment Policy"
+  publisher: "Headquarters Marine Corps"
+---
+
+## What IPAC Owns at the Join
+
+The Installation Personnel Administration Center runs the system-of-record steps for inbound Marines. Unit S-1 stages the package. IPAC executes the MCTFS join, opens the OMPF Field Folder, posts BAH and BAS, and reconciles EDFR<Citation source="MCO 1300.8" />.
+
+IPAC sits between unit S-1 and DFAS. Errors at this desk produce pay disputes, missing entitlements, and OMPF gaps. The 0111 inbound counselor owns the join transaction. The 0111 pay clerk owns the pay starts. The disbursing technician verifies the MCTFS-to-DJMS posting.
+
+<IPACvsUnitDecisionMatrix rows={[
+  { unit: "Receive orders, sponsor handoff, unit check-in", ipac: "Validate the inbound package, run MCTFS join" },
+  { unit: "Stage NAVMC 10922, SGLI election, BAH eligibility docs", ipac: "Post BAH and BAS, post FLPP and SDAP if eligible" },
+  { unit: "Hand off OMPF Field Folder to IPAC", ipac: "Open OMPF Field Folder, file KSDs per IRAM Chapter 6" },
+  { unit: "Reconcile unit roster", ipac: "Pull EDFR, clear rejections, post corrections" }
+]} />
+
+## Performance Steps
+
+### Step 1 - Receive the Inbound Package from Unit S-1
+
+The unit S-1 hands off a packet containing.
+
+- PCS orders, one signed copy
+- Original ID card
+- Endorsed NAVMC 10922 with dependent documentation
+- SGLI election or declination
+- BAH supporting documents (lease, dependent address, government quarters status)
+- OMPF Field Folder routed through unit S-1
+
+Per MCO 5000.14D<Citation source="MCO 5000.14D" />, IPAC refuses incomplete packets. Return for completion. Do not run a partial join.
+
+### Step 2 - Validate the Package
+
+The 0111 inbound counselor verifies.
+
+- Orders match the MCTFS gain notification
+- ID card matches the orders
+- NAVMC 10922 dependency line matches the BAH eligibility documents
+- SGLI election present
+- OMPF Field Folder content intact
+
+Reject and route back to unit S-1 on any gap. Log the return on the IPAC tracker.
+
+<IPACRoutingCallout billet="ipac-inbound-counselor" route="Marine inbound, MCTFS join not yet posted">
+  The inbound counselor owns the validation gate. No MCTFS transaction fires until every line of the inbound package validates against the orders.
+</IPACRoutingCallout>
+
+### Step 3 - Cut the MCTFS Join Transaction
+
+The 0111 inbound counselor builds the join in UD-MIPS per MCTFSPRIUM<Citation source="MCTFSPRIUM" />.
+
+- Member EDIPI
+- Gaining RUC and MCC
+- Detach date from the losing command
+- Arrival date at the gaining command
+- Days of leave en route
+- Days of travel
+- Reporting endorsement code
+
+Submit the transaction. Pull the receipt. File the receipt in the OMPF Field Folder.
+
+### Step 4 - Post BAH
+
+The 0111 pay clerk runs the BAH start per DoDFMR Vol 7A Chapter 26<Citation source="DoDFMR Vol 7A Chapter 26" />.
+
+- Rate category from the NAVMC 10922 dependency status
+- Zip code from PCS orders or the government quarters address
+- Effective date matches the arrival date
+- Confirm the rate against the DTMO BAH calculator
+
+If the Marine moves into government quarters on arrival, post a BAH stop on the same date. Document the quarters assignment in the OMPF.
+
+<IPACRoutingCallout billet="ipac-pay-clerk" route="Pay starts post on the same MCTFS cycle as the join">
+  Post BAH, BAS, FLPP, and SDAP on the same join cycle. A delayed pay post creates a member debt when retroactive starts hit one or two cycles later.
+</IPACRoutingCallout>
+
+### Step 5 - Post BAS
+
+Post BAS at the enlisted or officer rate per DoDFMR Vol 7A Chapter 25.
+
+- Standard BAS rate for the rank
+- Effective date matches the arrival date
+- Separate rations status from the orders
+
+If the Marine subsists in a government mess, post a BAS stop and document the mess assignment.
+
+### Step 6 - Open the OMPF Field Folder
+
+The 0111 inbound counselor opens the OMPF Field Folder per MCO P1070.12K Chapter 3<Citation source="MCO P1070.12K" />.
+
+- New folder tab with EDIPI, name, and grade
+- Endorsed orders filed
+- NAVMC 10922 filed
+- SGLI election filed
+- Join receipt filed
+
+The folder transfers physically from the unit S-1 mail run. IPAC takes custody at the inbound desk and signs the chain-of-custody log.
+
+### Step 7 - Upload KSDs to the OMPF
+
+The 0111 inbound counselor uploads Key Supporting Documents to the electronic OMPF per MCO P1070.12K Chapter 6.
+
+- Endorsed orders
+- NAVMC 10922
+- SGLI election
+- BAH supporting documents
+- Quarters assignment if applicable
+
+Confirm each upload posts to the right document type code. Pull the OMPF index after the upload and reconcile.
+
+### Step 8 - Pull EDFR and Reconcile
+
+Within 24 hours of the join, the 0111 pay clerk pulls the EDFR.
+
+- Member appears at the gaining RUC
+- BAH posts at the right rate
+- BAS posts
+- Net pay reflects the new entitlements
+- No rejection codes hit against the join
+
+A rejection requires immediate correction. Common causes.
+
+- Mismatch between the orders detach date and the MCTFS posted detach date
+- BAH zip code outside the DTMO range
+- NAVMC 10922 dependency field empty
+- SGLI election value out of range
+
+Clear each rejection on the same business day. Log every retransmission in the IPAC tracker.
+
+## Common Rejection Causes
+
+The top five MCTFS join rejections at the IPAC inbound desk.
+
+1. Detach date mismatch. The losing command posted a different detach date than the orders show. Pull both records. Submit the corrected detach. Resubmit the join.
+2. BAH rate code rejection. Zip code outside the published DTMO table. Verify the orders zip code. If the rate code is missing from DTMO, route a help desk ticket to MCTFS Operations.
+3. Dependency field empty. NAVMC 10922 routes through unit S-1 but the dependency line did not populate the join request. Re-enter the dependency status. Resubmit.
+4. SGLI election out of range. The election form shows a coverage value outside the schedule. Pull the form. Correct the value. File the corrected election.
+5. OMPF custody chain break. The OMPF Field Folder did not transfer with the join package. Place the join on hold. Recover the folder from the unit S-1 mail run. Open the custody log.
+
+## Pay Starts on the Same Cycle
+
+IPAC posts BAH, BAS, FLPP, and SDAP on the same MCTFS cycle as the join.
+
+- BAH start, effective the arrival date
+- BAS start, effective the arrival date
+- FLPP start if the Marine carries a current DLPT score and the billet supports it
+- SDAP start if the Marine reports to a billet on the SDAP table
+
+A pay start posted off-cycle generates a retroactive payment one to two cycles later. The retroactive often hits at the wrong rate and produces a member debt. Run the pay starts on the join cycle.
+
+## EDFR Reconciliation Window
+
+IPAC pulls the EDFR three times in the first 30 days.
+
+- 24 hours after the join, verify the member appears at the gaining RUC
+- 5 business days after the join, verify pay starts post
+- 30 days after the join, run the full reconciliation against the inbound package
+
+If a discrepancy survives the 30-day check, the IPAC supervisor opens a case ticket through MCTFS Operations.
+
+<Callout variant="warning" title="Audit posture">
+  EDFR reconciliation discrepancies surviving the 30-day window get flagged in IGMC inspections. The IPAC pay clerk owns the reconciliation. The IPAC OIC signs the 30-day report.
+</Callout>
+
+## Routing Back to Unit S-1
+
+IPAC routes the inbound back to unit S-1 in three cases.
+
+- The inbound package is incomplete. Unit S-1 completes and resubmits.
+- The orders show a detach error. Unit S-1 coordinates with the losing command for a corrected message.
+- The Marine arrives without orders. Unit S-1 contacts the losing command for a duplicate set before IPAC processes the join.
+
+In each case, log the route-back in the IPAC tracker. No join runs on an incomplete or incorrect package.
+
+## Source Policies
+
+- MCO 1300.8 Marine Corps Personnel Assignment Policy
+- MCO 5000.14D Marine Corps Administrative Procedures
+- MCO P1070.12K Individual Records Administration Manual (Chapters 3 and 6)
+- MCTFSPRIUM Marine Corps Total Force System Personnel Reporting Instructions Users Manual
+- DoDFMR Volume 7A Chapter 25 (BAS) and Chapter 26 (BAH)
