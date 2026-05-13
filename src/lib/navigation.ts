@@ -4,7 +4,6 @@ import {
   Scale,
   Workflow,
   PlaySquare,
-  ClipboardList,
   Wrench,
   Search,
   Info,
@@ -73,15 +72,6 @@ export const NAV_ITEMS: NavItem[] = [
     roles: [...ROLES],
     ready: false,
     phase: 7,
-  },
-  {
-    label: "References",
-    href: "/references",
-    description: "Forms, calculators, checklists.",
-    icon: ClipboardList,
-    roles: [...ROLES],
-    ready: false,
-    phase: 4,
   },
   {
     label: "Tools",
