@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileDown, Loader2 } from "lucide-react";
+import { logAuditEvent } from "@/lib/security/audit-log";
 
 /**
  * PDF letter builder. Loads @react-pdf/renderer dynamically to keep it out of
@@ -20,6 +21,17 @@ interface FormState {
   body: string;
 }
 
+// Field length limits per DoD document standards.
+const LIMITS = {
+  toName: 80,
+  fromName: 80,
+  unit: 60,
+  body: 2000,
+} as const;
+
+// Allowlist: printable ASCII excluding control characters and PDF escape sequences.
+const SAFE_TEXT = /^[\x20-\x7E\r\n\t]*$/;
+
 const DEFAULTS: FormState = {
   template: "separation",
   toName: "Marine, Cpl I.M.",
@@ -30,14 +42,40 @@ const DEFAULTS: FormState = {
     "This letter confirms your separation processing has been initiated. Report to S-1 with required records by 0900.",
 };
 
+function validateForm(form: FormState): string | null {
+  if (!form.toName.trim()) return "To field is required.";
+  if (form.toName.length > LIMITS.toName) return `To field exceeds ${LIMITS.toName} characters.`;
+  if (!form.fromName.trim()) return "From field is required.";
+  if (form.fromName.length > LIMITS.fromName) return `From field exceeds ${LIMITS.fromName} characters.`;
+  if (!form.unit.trim()) return "Unit field is required.";
+  if (form.unit.length > LIMITS.unit) return `Unit field exceeds ${LIMITS.unit} characters.`;
+  if (!form.body.trim()) return "Body field is required.";
+  if (form.body.length > LIMITS.body) return `Body exceeds ${LIMITS.body} characters.`;
+  if (!SAFE_TEXT.test(form.toName)) return "To field contains invalid characters.";
+  if (!SAFE_TEXT.test(form.fromName)) return "From field contains invalid characters.";
+  if (!SAFE_TEXT.test(form.unit)) return "Unit field contains invalid characters.";
+  if (!SAFE_TEXT.test(form.body)) return "Body contains invalid characters.";
+  if (!form.date) return "Date is required.";
+  return null;
+}
+
 export function PdfLetterBuilder() {
   const [form, setForm] = React.useState<FormState>(DEFAULTS);
   const [busy, setBusy] = React.useState(false);
-  const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
+  const [validationError, setValidationError] = React.useState<string | null>(null);
+  const update = <K extends keyof FormState>(k: K, v: FormState[K]) => {
+    setValidationError(null);
     setForm((s) => ({ ...s, [k]: v }));
+  };
 
   const generate = async () => {
+    const err = validateForm(form);
+    if (err) {
+      setValidationError(err);
+      return;
+    }
     setBusy(true);
+    logAuditEvent("EXPORT_PDF", "/tools/pdf-letter-builder", { template: form.template });
     try {
       const { Document, Page, Text, View, StyleSheet, pdf } = await import("@react-pdf/renderer");
       const styles = StyleSheet.create({
@@ -111,39 +149,56 @@ export function PdfLetterBuilder() {
             />
           </label>
           <label className="text-sm">
-            <span className="mb-1 block font-semibold">To</span>
+            <span className="mb-1 block font-semibold">
+              To <span className="font-normal text-[var(--color-muted-foreground)]">({form.toName.length}/{LIMITS.toName})</span>
+            </span>
             <input
               value={form.toName}
+              maxLength={LIMITS.toName}
               onChange={(e) => update("toName", e.target.value)}
               className="h-9 w-full rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-background)] px-2"
             />
           </label>
           <label className="text-sm">
-            <span className="mb-1 block font-semibold">From</span>
+            <span className="mb-1 block font-semibold">
+              From <span className="font-normal text-[var(--color-muted-foreground)]">({form.fromName.length}/{LIMITS.fromName})</span>
+            </span>
             <input
               value={form.fromName}
+              maxLength={LIMITS.fromName}
               onChange={(e) => update("fromName", e.target.value)}
               className="h-9 w-full rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-background)] px-2"
             />
           </label>
           <label className="text-sm sm:col-span-2">
-            <span className="mb-1 block font-semibold">Unit</span>
+            <span className="mb-1 block font-semibold">
+              Unit <span className="font-normal text-[var(--color-muted-foreground)]">({form.unit.length}/{LIMITS.unit})</span>
+            </span>
             <input
               value={form.unit}
+              maxLength={LIMITS.unit}
               onChange={(e) => update("unit", e.target.value)}
               className="h-9 w-full rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-background)] px-2"
             />
           </label>
           <label className="text-sm sm:col-span-2">
-            <span className="mb-1 block font-semibold">Body</span>
+            <span className="mb-1 block font-semibold">
+              Body <span className="font-normal text-[var(--color-muted-foreground)]">({form.body.length}/{LIMITS.body})</span>
+            </span>
             <textarea
               value={form.body}
+              maxLength={LIMITS.body}
               onChange={(e) => update("body", e.target.value)}
               rows={5}
               className="w-full rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-background)] p-2 text-sm"
             />
           </label>
         </div>
+        {validationError && (
+          <p role="alert" className="text-sm font-medium text-[var(--color-status-stale)]">
+            {validationError}
+          </p>
+        )}
         <Button onClick={generate} disabled={busy}>
           {busy ? <Loader2 className="size-4 animate-spin" /> : <FileDown className="size-4" />}
           {busy ? "Generating." : "Generate PDF"}

@@ -21,8 +21,78 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Trash2, FileDown, Loader2, Info } from "lucide-react";
+import { logAuditEvent } from "@/lib/security/audit-log";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ranks } from "@/lib/directives/ranks";
+
+// Field length limits per DoD document standards.
+const NAVAL_LIMITS = {
+  ssic: 4,
+  originatorCode: 20,
+  fromLine: 100,
+  toLine: 100,
+  subject: 150,
+  reference: 200,
+  enclosure: 200,
+  bodyContent: 2000,
+  bodyTitle: 100,
+  signatureName: 60,
+  signatureBilletTitle: 80,
+  maxReferences: 26,
+  maxEnclosures: 20,
+  maxBodyParagraphs: 20,
+} as const;
+
+// SSIC: 1 to 4 digits.
+const SSIC_RE = /^\d{1,4}$/;
+// Originator code: alphanumeric, hyphens, forward slashes.
+const ORIGINATOR_RE = /^[A-Za-z0-9\-/]{1,20}$/;
+// Safe text: printable ASCII + CR + LF + tab.
+const SAFE_TEXT = /^[\x20-\x7E\r\n\t]*$/;
+
+function validateNavalForm(form: FormState): string | null {
+  if (!SSIC_RE.test(form.ssic)) return "SSIC must be 1 to 4 digits.";
+  if (!ORIGINATOR_RE.test(form.originatorCode))
+    return "Originator code: alphanumeric, hyphens, and forward slashes only (max 20).";
+  if (!form.fromLine.trim()) return "From line is required.";
+  if (form.fromLine.length > NAVAL_LIMITS.fromLine)
+    return `From line exceeds ${NAVAL_LIMITS.fromLine} characters.`;
+  if (!form.toLine.trim()) return "To line is required.";
+  if (form.toLine.length > NAVAL_LIMITS.toLine)
+    return `To line exceeds ${NAVAL_LIMITS.toLine} characters.`;
+  if (!form.subject.trim()) return "Subject is required.";
+  if (form.subject.length > NAVAL_LIMITS.subject)
+    return `Subject exceeds ${NAVAL_LIMITS.subject} characters.`;
+  if (form.references.length > NAVAL_LIMITS.maxReferences)
+    return `Maximum ${NAVAL_LIMITS.maxReferences} references allowed.`;
+  for (const r of form.references) {
+    if (r.length > NAVAL_LIMITS.reference) return `A reference exceeds ${NAVAL_LIMITS.reference} characters.`;
+    if (r && !SAFE_TEXT.test(r)) return "A reference contains invalid characters.";
+  }
+  if (form.enclosures.length > NAVAL_LIMITS.maxEnclosures)
+    return `Maximum ${NAVAL_LIMITS.maxEnclosures} enclosures allowed.`;
+  for (const e of form.enclosures) {
+    if (e.length > NAVAL_LIMITS.enclosure) return `An enclosure exceeds ${NAVAL_LIMITS.enclosure} characters.`;
+    if (e && !SAFE_TEXT.test(e)) return "An enclosure contains invalid characters.";
+  }
+  if (form.body.length > NAVAL_LIMITS.maxBodyParagraphs)
+    return `Maximum ${NAVAL_LIMITS.maxBodyParagraphs} paragraphs allowed.`;
+  for (const b of form.body) {
+    if (b.content.length > NAVAL_LIMITS.bodyContent)
+      return `A paragraph exceeds ${NAVAL_LIMITS.bodyContent} characters.`;
+    if (!SAFE_TEXT.test(b.content)) return "A paragraph contains invalid characters.";
+    if (b.title && b.title.length > NAVAL_LIMITS.bodyTitle)
+      return `A paragraph title exceeds ${NAVAL_LIMITS.bodyTitle} characters.`;
+  }
+  if (!form.signatureName.trim()) return "Signature name is required.";
+  if (form.signatureName.length > NAVAL_LIMITS.signatureName)
+    return `Signature name exceeds ${NAVAL_LIMITS.signatureName} characters.`;
+  if (!form.signatureBilletTitle.trim()) return "Billet title is required.";
+  if (form.signatureBilletTitle.length > NAVAL_LIMITS.signatureBilletTitle)
+    return `Billet title exceeds ${NAVAL_LIMITS.signatureBilletTitle} characters.`;
+  if (!form.date) return "Date is required.";
+  return null;
+}
 
 interface BodyParagraph {
   id: number;
@@ -90,8 +160,10 @@ export function NavalLetterBuilder() {
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
+  const update = <K extends keyof FormState>(k: K, v: FormState[K]) => {
+    setError(null);
     setForm((s) => ({ ...s, [k]: v }));
+  };
 
   const updateRef = (i: number, v: string) =>
     setForm((s) => {
@@ -135,8 +207,14 @@ export function NavalLetterBuilder() {
     setForm((s) => ({ ...s, body: s.body.filter((b) => b.id !== id) }));
 
   const generate = async () => {
+    const validErr = validateNavalForm(form);
+    if (validErr) {
+      setError(validErr);
+      return;
+    }
     setBusy(true);
     setError(null);
+    logAuditEvent("EXPORT_DOCX", "/tools/naval-letter", { documentType: form.documentType, letterheadType: form.letterheadType });
     try {
       const [
         { Document, Packer, Paragraph, TextRun, TabStopType },
@@ -359,12 +437,17 @@ export function NavalLetterBuilder() {
           </div>
           <div className="space-y-1">
             <Label>SSIC</Label>
-            <Input value={form.ssic} onChange={(e) => update("ssic", e.target.value)} />
+            <Input
+              value={form.ssic}
+              maxLength={NAVAL_LIMITS.ssic}
+              onChange={(e) => update("ssic", e.target.value)}
+            />
           </div>
           <div className="space-y-1">
             <Label>Originator code</Label>
             <Input
               value={form.originatorCode}
+              maxLength={NAVAL_LIMITS.originatorCode}
               onChange={(e) => update("originatorCode", e.target.value)}
             />
           </div>
@@ -383,15 +466,27 @@ export function NavalLetterBuilder() {
         <CardContent className="space-y-3">
           <div className="space-y-1">
             <Label>From</Label>
-            <Input value={form.fromLine} onChange={(e) => update("fromLine", e.target.value)} />
+            <Input
+              value={form.fromLine}
+              maxLength={NAVAL_LIMITS.fromLine}
+              onChange={(e) => update("fromLine", e.target.value)}
+            />
           </div>
           <div className="space-y-1">
             <Label>To</Label>
-            <Input value={form.toLine} onChange={(e) => update("toLine", e.target.value)} />
+            <Input
+              value={form.toLine}
+              maxLength={NAVAL_LIMITS.toLine}
+              onChange={(e) => update("toLine", e.target.value)}
+            />
           </div>
           <div className="space-y-1">
             <Label>Subject</Label>
-            <Input value={form.subject} onChange={(e) => update("subject", e.target.value)} />
+            <Input
+              value={form.subject}
+              maxLength={NAVAL_LIMITS.subject}
+              onChange={(e) => update("subject", e.target.value)}
+            />
             <p className="text-xs text-[var(--color-muted-foreground)]">Output uppercases the subject automatically.</p>
           </div>
         </CardContent>
@@ -514,6 +609,7 @@ export function NavalLetterBuilder() {
             <Label>Name (last, initials)</Label>
             <Input
               value={form.signatureName}
+              maxLength={NAVAL_LIMITS.signatureName}
               onChange={(e) => update("signatureName", e.target.value)}
             />
           </div>
@@ -521,6 +617,7 @@ export function NavalLetterBuilder() {
             <Label>Billet title</Label>
             <Input
               value={form.signatureBilletTitle}
+              maxLength={NAVAL_LIMITS.signatureBilletTitle}
               onChange={(e) => update("signatureBilletTitle", e.target.value)}
             />
           </div>

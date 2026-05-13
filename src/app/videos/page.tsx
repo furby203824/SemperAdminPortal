@@ -198,7 +198,7 @@ function VirtualVideoGrid({ items }: { items: VideoData[] }) {
             }}
           >
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 pb-4">
-              {rows[vRow.index].map((v) => (
+              {(rows[vRow.index] ?? []).map((v) => (
                 <VideoCard key={v.slug} v={v} />
               ))}
             </div>

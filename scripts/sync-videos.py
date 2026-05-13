@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+import os
 import re
 import sqlite3
 import sys
@@ -22,7 +23,10 @@ from pathlib import Path
 # Config
 # ---------------------------------------------------------------------------
 
-DEFAULT_DB = Path(r"E:\Videos\Video Database\Video Database\data\vanguard.db")
+# Resolve DB path from env var first, then fall back to the developer default.
+# Set VANGUARD_DB=/path/to/vanguard.db in CI/CD or shell profile.
+_env_db = os.environ.get("VANGUARD_DB")
+DEFAULT_DB = Path(_env_db) if _env_db else Path(r"E:\Videos\Video Database\Video Database\data\vanguard.db")
 VIDEOS_DIR = Path(__file__).parent.parent / "content" / "videos"
 
 AUDIENCE_TO_ROLES: dict[str | None, list[str]] = {

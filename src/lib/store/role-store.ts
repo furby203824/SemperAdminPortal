@@ -2,7 +2,13 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { Role } from "@/lib/roles";
+import { ROLES, type Role } from "@/lib/roles";
+import { logAuditEvent } from "@/lib/security/audit-log";
+
+/** Returns true only for known role values. Guards against localStorage tampering. */
+function isValidRole(value: unknown): value is Role {
+  return typeof value === "string" && (ROLES as readonly string[]).includes(value);
+}
 
 export interface RecentEntry {
   href: string;
@@ -40,8 +46,19 @@ export const useRoleStore = create<RoleState>()(
       role: null,
       hydrated: false,
       recents: [],
-      setRole: (role) => set({ role, hydrated: true }),
-      clearRole: () => set({ role: null, hydrated: true }),
+      setRole: (role) => {
+        if (!isValidRole(role)) {
+          logAuditEvent("ROLE_TAMPER_DETECTED", "/role-store", { attempted: String(role) });
+          return;
+        }
+        const prev = get().role;
+        logAuditEvent("ROLE_CHANGE", "/role-store", { from: prev ?? "none", to: role });
+        set({ role, hydrated: true });
+      },
+      clearRole: () => {
+        logAuditEvent("ROLE_CHANGE", "/role-store", { from: get().role ?? "none", to: "none" });
+        set({ role: null, hydrated: true });
+      },
       setHydrated: (v) => set({ hydrated: v }),
       addRecent: ({ href, title }) => {
         if (!href || RECENTS_EXCLUDE.has(href)) return;
@@ -63,7 +80,16 @@ export const useRoleStore = create<RoleState>()(
         recents: state.recents,
       }),
       onRehydrateStorage: () => (state) => {
-        state?.setHydrated(true);
+        if (state) {
+          // Reject tampered role values that don't match the canonical ROLES list.
+          if (state.role !== null && !isValidRole(state.role)) {
+            logAuditEvent("ROLE_TAMPER_DETECTED", "/role-store/rehydrate", {
+              attempted: String(state.role),
+            });
+            state.role = null;
+          }
+          state.setHydrated(true);
+        }
       },
     }
   )

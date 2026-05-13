@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ExternalLink, Mail, ShieldCheck } from "lucide-react";
+import { CuiBanner } from "@/components/shell/cui-banner";
 
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
 const BUILD_VERSION = "v1.2.0";
@@ -114,6 +115,7 @@ export function Footer() {
           <p className="font-mono">Built with care for the administrative community.</p>
         </div>
       </div>
+      <CuiBanner />
     </footer>
   );
 }
