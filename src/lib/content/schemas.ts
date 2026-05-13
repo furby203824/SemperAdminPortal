@@ -36,7 +36,7 @@ export const snippetSchema = baseFrontmatter.extend({
 });
 
 export const videoSchema = baseFrontmatter.extend({
-  durationSeconds: z.number().int().positive(),
+  durationSeconds: z.number().int().nonnegative().default(0),
   videoUrl: z.string(),
   posterUrl: z.string().optional(),
   transcript: z.string().optional(),

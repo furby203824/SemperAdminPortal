@@ -14,6 +14,7 @@
     "content:sync": "node scripts/sync-content.mjs",
     "citations:import": "python scripts/citations-import.py",
     "citations:audit": "python scripts/citations-audit.py",
+    "videos:sync": "python scripts/sync-videos.py",
     "prebuild": "node scripts/sync-content.mjs",
     "predev": "node scripts/sync-content.mjs",
     "search:index": "pagefind --site out --output-path out/pagefind",
