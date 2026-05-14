@@ -10,12 +10,12 @@ function: "GENA"
 skillLevel: 2000
 trEventCode: "0102-GENA-1015"
 mosPerforming: ["0102", "0111", "0170"]
-sourcePolicy: "MCO 5239.2C"
+sourcePolicy: "MCO 5239.2B"
 billets: ["s-1-clerk", "s-1-chief", "g-1-officer", "ipac-clerk"]
 gradesPerforming: ["LCpl", "Cpl", "Sgt", "SSgt"]
 sustainmentInterval: "12 months"
 references:
-  - "MCO 5239.2C Marine Corps Cybersecurity Program"
+  - "MCO 5239.2B Marine Corps Cybersecurity Program"
   - "MCO 5000.14D Marine Corps Administrative Procedures"
   - "DOD 8500.01E Cybersecurity"
   - "SECNAVINST 5211.5 Department of the Navy Privacy Act Program"
@@ -39,7 +39,7 @@ relatedRoles:
   leader: "/leader/admin-systems-management/account-provisioning-and-saar-n-processing"
   commander: "/commander/admin-systems-management/account-provisioning-and-saar-n-processing"
 source:
-  title: "Account Provisioning and SAAR-N Processing - MCO 5239.2C and MCAP Enclosure 6"
+  title: "Account Provisioning and SAAR-N Processing - MCO 5239.2B and MCAP Enclosure 6"
   publisher: "Headquarters Marine Corps M&RA"
 ---
 
@@ -49,7 +49,7 @@ S-1 admin specialists own account provisioning at the unit level. The S-1 clerk 
 
 Source documents flow from billet assignments, MOS qualification certificates, command guidance on role assignment, and the unit access roster. SAAR-N requests route to MISSO for MCTFS and UD-MIPS access and to RAPIDS for workstation operator access. Outputs include the MISSO activation confirmation, the cyber awareness training certificate, the privileged access agreement when applicable, and the OMPF Field Folder systems tab entry.
 
-MCAAT inspects the SAAR-N packet for security manager signature, training proof, role-billet alignment, and activation audit trail. A clerk operating without a current SAAR-N triggers a finding under MCO 5239.2C<Citation source="MCO 5239.2C" />. Activate access only after training, not before.
+MCAAT inspects the SAAR-N packet for security manager signature, training proof, role-billet alignment, and activation audit trail. A clerk operating without a current SAAR-N triggers a finding under MCO 5239.2B<Citation source="MCO 5239.2B" />. Activate access only after training, not before.
 
 ## Trigger events
 
@@ -64,7 +64,7 @@ MCAAT inspects the SAAR-N packet for security manager signature, training proof,
 ## Processing workflow
 
 1. Receive the request. Pull the SAAR-N draft from the inbound clerk or the billet change order. Cross-check EDIPI, billet, and requested role. The S-1 clerk runs receipt.
-2. Validate billet, MOS, and grade. Confirm the role aligns with the billet, the MOS qualifies the Marine for the role, and the grade meets any minimum threshold per MCO 5239.2C<Citation source="MCO 5239.2C" /> Chapter 4.
+2. Validate billet, MOS, and grade. Confirm the role aligns with the billet, the MOS qualifies the Marine for the role, and the grade meets any minimum threshold per MCO 5239.2B<Citation source="MCO 5239.2B" /> Chapter 4.
 3. Validate need-to-know. The unit security manager confirms role-based access aligns with the duty per SECNAVINST 5211.5<Citation source="SECNAVINST 5211.5" />. The security manager signs.
 4. Confirm cyber awareness training. Verify the Marine holds a current annual cyber awareness training certificate per DOD 8500.01E<Citation source="DOD 8500.01E" />.
 5. Build the SAAR-N packet. Complete DD Form 2875 with all required signatures. Attach the training certificate and Privacy Act acknowledgment.
@@ -100,23 +100,23 @@ MCAAT inspects the SAAR-N packet for security manager signature, training proof,
 
 - SAAR-N submitted without security manager signature. MISSO rejects on the first review. Verify all signatures before routing.
 - Access activated before cyber awareness training. The clerk operates outside policy. Confirm training before submission per DOD 8500.01E<Citation source="DOD 8500.01E" />.
-- Role mismatch with billet. Clerk overprovisioned for the assigned duty. Verify role-billet alignment per MCO 5239.2C<Citation source="MCO 5239.2C" />.
+- Role mismatch with billet. Clerk overprovisioned for the assigned duty. Verify role-billet alignment per MCO 5239.2B<Citation source="MCO 5239.2B" />.
 - Page 11 entry skipped. The OMPF lands without record of access. Cut the Page 11 within 5 working days of activation per MCO P1070.12K<Citation source="MCO P1070.12K" />.
 - Active account roster not updated. The quarterly review picks up the gap. Update the roster at every activation.
 
 ## Decision points
 
-- Standard versus privileged access. The 0111 needs MCTFS or UD-MIPS certifier access. Route through the Privileged Certifier Account Authorization workflow with the privileged access agreement attached per MCO 5239.2C<Citation source="MCO 5239.2C" />.
+- Standard versus privileged access. The 0111 needs MCTFS or UD-MIPS certifier access. Route through the Privileged Certifier Account Authorization workflow with the privileged access agreement attached per MCO 5239.2B<Citation source="MCO 5239.2B" />.
 - Temporary access for activated reservist. The reservist activates for a 90-day window. The S-1 chief routes a time-limited SAAR-N with explicit sunset date. MISSO closes the account at sunset.
 - Inbound clerk arrives without prior cyber awareness certificate. The clerk runs cyber awareness training as part of the inbound brief before SAAR-N submission per DOD 8500.01E<Citation source="DOD 8500.01E" />.
 
 ## Authority
 
-This sub-page sits under MCO 5239.2C<Citation source="MCO 5239.2C" /> Marine Corps Cybersecurity Program and MCO 5000.14D<Citation source="MCO 5000.14D" /> MCAP enclosure 6, Responsibilities of the Manpower Information Systems Support Office. DoD-level policy at DOD 8500.01E<Citation source="DOD 8500.01E" /> sets the role-based access framework and annual training requirement. NAVMC 3500.3E<Citation source="NAVMC 3500.3E" /> T-R event 0102-GENA-1015 performance steps 2 and 3 govern administrator permissions and assignment. SECNAVINST 5211.5<Citation source="SECNAVINST 5211.5" /> Privacy Act Program governs Privacy Act acknowledgment at access.
+This sub-page sits under MCO 5239.2B<Citation source="MCO 5239.2B" /> Marine Corps Cybersecurity Program and MCO 5000.14D<Citation source="MCO 5000.14D" /> MCAP enclosure 6, Responsibilities of the Manpower Information Systems Support Office. DoD-level policy at DOD 8500.01E<Citation source="DOD 8500.01E" /> sets the role-based access framework and annual training requirement. NAVMC 3500.3E<Citation source="NAVMC 3500.3E" /> T-R event 0102-GENA-1015 performance steps 2 and 3 govern administrator permissions and assignment. SECNAVINST 5211.5<Citation source="SECNAVINST 5211.5" /> Privacy Act Program governs Privacy Act acknowledgment at access.
 
 ## Related references
 
-- MCO 5239.2C Marine Corps Cybersecurity Program. Role-based access provisioning and review rules.
+- MCO 5239.2B Marine Corps Cybersecurity Program. Role-based access provisioning and review rules.
 - MCO 5000.14D Marine Corps Administrative Procedures. MISSO and S-1 roles for system management.
 - DOD 8500.01E Cybersecurity. DoD-level access provisioning and annual training rules.
 - SECNAVINST 5211.5 Privacy Act Program. Privacy Act acknowledgment at access.
