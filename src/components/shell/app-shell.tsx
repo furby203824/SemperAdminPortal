@@ -11,6 +11,7 @@ import { BottomTabs } from "./bottom-tabs";
 import { Breadcrumbs } from "./breadcrumbs";
 import { RecentsTracker } from "./recents-tracker";
 import { RoleRouteSync } from "./role-route-sync";
+import { TermsModal } from "./terms-modal";
 
 /**
  * AppShell - v1.2.
@@ -70,6 +71,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <RolePickerDialog />
       <RecentsTracker />
       <RoleRouteSync />
+      <TermsModal />
     </div>
   );
 }

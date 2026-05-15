@@ -11,6 +11,7 @@ import {
   referenceSchema,
   toolSchema,
   adminSchema,
+  legalSchema,
   roleContentSchema,
   inspectionSchema,
   citationSchema,
@@ -21,6 +22,7 @@ import {
   type Video,
   type Reference,
   type Tool,
+  type Legal,
   type AdminContent,
   type UnitType,
   type RoleContent,
@@ -77,6 +79,8 @@ export const getReferences = (): ContentEntry<Reference>[] =>
   loadDir("references", referenceSchema);
 export const getTools = (): ContentEntry<Tool>[] =>
   loadDir("tools", toolSchema);
+export const getLegal = (): ContentEntry<Legal>[] =>
+  loadDir("legal", legalSchema);
 export const getAdminContent = (): ContentEntry<AdminContent>[] =>
   loadDir("admin", adminSchema);
 

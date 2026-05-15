@@ -68,6 +68,10 @@ export const reportSchema = baseFrontmatter.extend({
   url: z.string().url().optional(),
 });
 
+export const legalSchema = baseFrontmatter.extend({
+  type: z.enum(["disclaimer", "terms"]),
+});
+
 export const UNIT_TYPES = ["s1-g1", "i-and-i", "pac"] as const;
 export const ADMIN_FUNCTIONS = ["GENA", "OPER", "MPMN", "PERA"] as const;
 export const SKILL_LEVELS = [1000, 2000, 2100] as const;
@@ -258,6 +262,7 @@ export type Reference = z.infer<typeof referenceSchema>;
 export type Tool = z.infer<typeof toolSchema>;
 export type Link = z.infer<typeof linkSchema>;
 export type Report = z.infer<typeof reportSchema>;
+export type Legal = z.infer<typeof legalSchema>;
 export type AdminContent = z.infer<typeof adminSchema>;
 export type RoleContent = z.infer<typeof roleContentSchema>;
 
