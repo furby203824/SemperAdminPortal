@@ -35,9 +35,11 @@ export default async function LegalDetailPage({
 
   const doc = entry.frontmatter;
   const verifiedDate = new Date(doc.lastVerified);
+  const isValidDate = !isNaN(verifiedDate.getTime());
   const now = new Date();
-  const monthsOld =
-    (now.getTime() - verifiedDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+  const monthsOld = isValidDate
+    ? (now.getTime() - verifiedDate.getTime()) / (1000 * 60 * 60 * 24 * 30)
+    : 0;
 
   let status: "fresh" | "aging" | "stale" = "fresh";
   if (monthsOld > 24) status = "stale";

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -25,7 +26,6 @@ export function TermsModal() {
   };
 
   const handleDecline = () => {
-    localStorage.setItem(TERMS_AGREED_KEY, "true");
     setOpen(false);
   };
 
@@ -78,7 +78,7 @@ export function TermsModal() {
               </div>
 
               <p className="text-xs text-muted-foreground italic">
-                For the complete disclaimer, visit the <a href="/legal/disclaimer" className="underline hover:text-foreground" target="_blank" rel="noopener noreferrer">full disclaimer page</a>.
+                For the complete disclaimer, visit the <Link href="/legal/disclaimer" className="underline hover:text-foreground">full disclaimer page</Link>.
               </p>
             </div>
           </TabsContent>
@@ -114,7 +114,7 @@ export function TermsModal() {
               </div>
 
               <p className="text-xs text-muted-foreground italic">
-                For the complete terms, visit the <a href="/legal/terms" className="underline hover:text-foreground" target="_blank" rel="noopener noreferrer">full terms page</a>.
+                For the complete terms, visit the <Link href="/legal/terms" className="underline hover:text-foreground">full terms page</Link>.
               </p>
             </div>
           </TabsContent>
