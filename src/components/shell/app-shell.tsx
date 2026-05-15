@@ -10,6 +10,7 @@ import { RolePickerDialog } from "./role-picker-dialog";
 import { BottomTabs } from "./bottom-tabs";
 import { Breadcrumbs } from "./breadcrumbs";
 import { RecentsTracker } from "./recents-tracker";
+import { RoleRouteSync } from "./role-route-sync";
 
 /**
  * AppShell - v1.2.
@@ -68,6 +69,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
       <RolePickerDialog />
       <RecentsTracker />
+      <RoleRouteSync />
     </div>
   );
 }
