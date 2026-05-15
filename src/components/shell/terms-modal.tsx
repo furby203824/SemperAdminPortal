@@ -78,7 +78,7 @@ export function TermsModal() {
               </div>
 
               <p className="text-xs text-muted-foreground italic">
-                For the complete disclaimer, visit the <Link href="/legal/disclaimer" className="underline hover:text-foreground">full disclaimer page</Link>.
+                For the complete disclaimer, visit the <Link href="/legal/disclaimer" className="underline hover:text-foreground" onClick={() => setOpen(false)}>full disclaimer page</Link>.
               </p>
             </div>
           </TabsContent>
@@ -114,7 +114,7 @@ export function TermsModal() {
               </div>
 
               <p className="text-xs text-muted-foreground italic">
-                For the complete terms, visit the <Link href="/legal/terms" className="underline hover:text-foreground">full terms page</Link>.
+                For the complete terms, visit the <Link href="/legal/terms" className="underline hover:text-foreground" onClick={() => setOpen(false)}>full terms page</Link>.
               </p>
             </div>
           </TabsContent>
