@@ -54,7 +54,8 @@
           "code": "04",
           "question": "Does the unit have and maintain access to the OMPF-Records Management Application (O-RMA) to validate and update Marines official record?",
           "references": [
-            "MCO 1070.1, MARADMIN 412/23"
+            "MCO 1070.1",
+            "MARADMIN 412/23"
           ],
           "audience": [
             "IPAC"
@@ -147,7 +148,8 @@
           "code": "05",
           "question": "Does the unit have and maintain access to the OMPF-Records Management Application (O-RMA) to validate and update Marines official record?",
           "references": [
-            "MCO 1070.1, MARADMIN 412/23"
+            "MCO 1070.1",
+            "MARADMIN 412/23"
           ],
           "audience": [
             "REPORTING"
@@ -268,7 +270,8 @@
           "code": "14",
           "question": "Does the unit have and maintain access to the OMPF-Records Management Application (O-RMA) to validate and update Marines official record?",
           "references": [
-            "MCO 1070.1, MARADMIN 412/23"
+            "MCO 1070.1",
+            "MARADMIN 412/23"
           ],
           "audience": [
             "SUPPORTING"
