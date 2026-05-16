@@ -263,4 +263,8 @@ if (citationIndex) {
         " of " +
         totalScanned +
         " references resolved. " +
-  
+        scanUnresolved +
+        " unresolved."
+    );
+  }
+}
